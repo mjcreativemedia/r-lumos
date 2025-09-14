@@ -1,0 +1,85 @@
+﻿Class Name,Name,Type
+u-theme-{inherit-light-dark-brand},u-theme-{inherit-light-dark-brand},Color
+u-text-style-{display-h1-h2-h3-h4-h5-h6-large-main-small},u-text-style-{display-h1-h2-h3-h4-h5-h6-large-main-small},Typography
+u-rich-text,u-rich-text,Typography
+u-line-height-{small-medium-large-huge},u-line-height-{small-medium-large-huge},Typography
+u-letter-spacing-{tight-normal},u-letter-spacing-{tight-normal},Typography
+u-section,u-section,Element
+u-container-{small-full},u-container-{small-full},Element
+u-svg,u-svg,Element
+u-path,u-path,Element
+u-sr-only,u-sr-only,Typography
+u-section-spacer,u-section-spacer,Element
+u-heading-accent,u-heading-accent,Color
+u-line-clamp-{1-2-3-4},u-line-clamp-{1-2-3-4},Typography
+u-content-wrapper,u-content-wrapper,Element
+u-button-group,u-button-group,Element
+u-child-contain,u-child-contain,Typography
+u-flex-horizontal-{wrap-nowrap},u-flex-horizontal-{wrap-nowrap},Flexbox
+u-flex-vertical-{wrap-nowrap},u-flex-vertical-{wrap-nowrap},Flexbox
+u-flex-grow,u-flex-grow,Flexbox
+u-flex-shrink,u-flex-shrink,Flexbox
+u-flex-noshrink,u-flex-noshrink,Flexbox
+u-grid-custom,u-grid-custom,Grid
+u-grid-subgrid,u-grid-subgrid,Grid
+u-grid-{autofit-autofill},u-grid-{autofit-autofill},Grid
+u-grid-{above-below},u-grid-{above-below},Grid
+u-grid-breakout,u-grid-breakout,Grid
+u-align-self-{variable-start-center-end-stretch},u-align-self-{variable-start-center-end-stretch},"Flexbox, Grid"
+u-align-items-{variable-start-center-end-stretch},u-align-items-{variable-start-center-end-stretch},"Flexbox, Grid"
+u-justify-content-{variable-start-center-end-between-around},u-justify-content-{variable-start-center-end-between-around},Flexbox
+u-color-inherit,u-color-inherit,Color
+u-color-faded,u-color-faded,Color
+u-background-transparent,u-background-transparent,Color
+u-background-1,u-background-1,Color
+u-background-2,u-background-2,Color
+u-background-skeleton,u-background-skeleton,Color
+u-gap-{inherit-gutter-0-1-2-3-4-5-6-7-8},u-gap-{inherit-gutter-0-1-2-3-4-5-6-7-8},Spacing
+u-gap-row-{inherit-gutter-0-1-2-3-4-5-6-7-8},u-gap-row-{inherit-gutter-0-1-2-3-4-5-6-7-8},Spacing
+u-margin-trim | u-ignore-trim,u-margin-trim | u-ignore-trim,Typography
+u-margin-top-{gutter-text-auto-0-1-2-3-4-5-6-7-8},u-margin-top-{gutter-text-auto-0-1-2-3-4-5-6-7-8},Spacing
+u-margin-bottom-{gutter-text-auto-0-1-2-3-4-5-6-7-8},u-margin-top-{gutter-text-auto-0-1-2-3-4-5-6-7-8},Spacing
+u-weight-{regular-medium-bold},u-weight-{regular-medium-bold},Typography
+u-min-height-screen,u-min-height-screen,Sizing
+u-column-{full-indent-1-2-3-4-5-6-7-8-9-10-11-12},u-column-{full-indent-1-2-3-4-5-6-7-8-9-10-11-12},Grid
+u-embed-{css-js},u-embed-{css-js},Element
+u-alignment-{start-center-end},u-alignment-{start-center-end},"Flexbox, Typography"
+u-text-transform-{none-uppercase-capitalize-lowercase},u-text-transform-{none-uppercase-capitalize-lowercase},Typography
+u-text-wrap-{default-balance-pretty},u-text-wrap-{default-balance-pretty},Typography
+u-max-width-{none-10ch-12ch-14ch-16ch-18ch-20ch-30ch-40ch-50ch-60ch-70ch-80ch-full},u-max-width-{none-10ch-12ch-14ch-16ch-18ch-20ch-30ch-40ch-50ch-60ch-70ch-80ch-full},Sizing
+u-radius-{none-inherit-small-main-round},u-radius-{none-inherit-small-main-round},Sizing
+u-overflow-visible,u-overflow-visible,Visibility
+u-overflow-hidden,u-overflow-hidden,Visibility
+u-overflow-clip,u-overflow-clip,Visibility
+u-overflow-x-auto,u-overflow-x-auto,Visibility
+u-overflow-y-auto,u-overflow-y-auto,Visibility
+u-overflow-hidden-left,u-overflow-hidden-left,Visibility
+u-display-{block—inline—inline-block—inline-flex—inline-grid—contents—none},u-display-{block—inline—inline-block—inline-flex—inline-grid—contents—none},Visibility
+u-hide-if-empty,u-hide-if-empty,Visibility
+u-hide-if-empty-cms,u-hide-if-empty-cms,Visibility
+u-zindex-{negative-unset-0-1-2-3},u-zindex-{negative-unset-0-1-2-3},Visibility
+u-position-{static-relative-absolute-sticky-fixed},u-position-{static-relative-absolute-sticky-fixed},Visibility
+u-height-full,u-height-full,Sizing
+u-width-full,u-width-full,Sizing
+u-cover,u-cover,Sizing
+u-cover-absolute,u-cover-absolute,Sizing
+u-text-trim-off,u-text-trim-off,Typography
+u-pointer-{on-off},u-pointer-{on-off},Miscellaneous
+u-ratio-{1-1—16-9—3-1—2-3—2-1—5-4—4-5},u-ratio-{1-1—16-9—3-1—2-3—2-1—5-4—4-5},Sizing
+u-margin-inline-auto,u-margin-inline-auto,Spacing
+u-order-first,u-order-first,"Flexbox, Grid"
+u-order-last,u-order-last,"Flexbox, Grid"
+u-order-unset-{above-below},u-order-unset-{above-below},Grid
+u-all-unset-{above-below},u-all-unset-{above-below},Grid
+u-object-fit-{cover-contain},u-object-fit-{cover-contain},Sizing
+u-threshold-{large-medium-small},u-threshold-{large-medium-small},Grid
+u-padding-{sitemargin-gutter-0-1-2-3-4-5-6-7-8-small-main-large},u-padding-{sitemargin-gutter-0-1-2-3-4-5-6-7-8-small-main-large},Spacing
+u-padding-block-{sitemargin-gutter-0-1-2-3-4-5-6-7-8-small-main-large},u-padding-block-{sitemargin-gutter-0-1-2-3-4-5-6-7-8-small-main-large},Spacing
+u-padding-inline-{sitemargin-gutter-0-1-2-3-4-5-6-7-8},u-padding-inline-{sitemargin-gutter-0-1-2-3-4-5-6-7-8},Spacing
+u-padding-top-{sitemargin-gutter-0-1-2-3-4-5-6-7-8-small-main-large},u-padding-top-{sitemargin-gutter-0-1-2-3-4-5-6-7-8-small-main-large},Spacing
+u-padding-bottom-{sitemargin-gutter-0-1-2-3-4-5-6-7-8-small-main-large},u-padding-bottom-{sitemargin-gutter-0-1-2-3-4-5-6-7-8-small-main-large},Spacing
+u-padding-left-{sitemargin-gutter-0-1-2-3-4-5-6-7-8},u-padding-left-{sitemargin-gutter-0-1-2-3-4-5-6-7-8},Spacing
+u-padding-right-{sitemargin-gutter-0-1-2-3-4-5-6-7-8},u-padding-right-{sitemargin-gutter-0-1-2-3-4-5-6-7-8},Spacing
+u-column-start-{auto-1-2-3-4-5-6-7-8-9-10-11-12},u-column-start-{auto-1-2-3-4-5-6-7-8-9-10-11-12},Grid
+u-row-start-{auto-1-2-3-4-5-6},u-row-start-{auto-1-2-3-4-5-6},Grid
+u-row-span-{1-2-3-4-5-6},u-row-span-{1-2-3-4-5-6},Grid

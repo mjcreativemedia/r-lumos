@@ -1,0 +1,90 @@
+/* =========================================
+   LUMOS EXTRAS
+   - Tiny reset + base rhythm (neutral, rem)
+   - Aspect-ratio utilities
+   - Container-query visibility helpers
+   ========================================= */
+
+/* ---------- Reset / Base Rhythm ---------- */
+/* Box sizing + media elements */
+*, *::before, *::after { box-sizing: border-box; }
+img, picture, video, canvas, svg { display: block; max-width: 100%; height: auto; }
+
+/* Typography baseline */
+html { hanging-punctuation: first last; }
+
+/* Remove default margins and re-add controlled rhythm via tokens */
+body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd { margin: 0; }
+
+/* Lists: unstyled by default; opt-in with your utilities */
+ul[role="list"], ol[role="list"] { list-style: none; margin: 0; padding: 0; }
+
+/* Buttons inherit font */
+button, input, select, textarea { font: inherit; color: inherit; }
+
+/* Anchor underline is handled in core; ensure focus-visible */
+a { text-underline-offset: 0.15em; }
+
+/* Base vertical rhythm for common text elements */
+p + p { margin-block-start: var(--space-4); }
+h1, h2, h3, h4, h5, h6 { font-weight: var(--weight-bold); line-height: var(--leading-tight); }
+h1 { font-size: var(--text-display-1); margin-block: var(--space-6) var(--space-4); }
+h2 { font-size: var(--text-xxl);       margin-block: var(--space-6) var(--space-4); }
+h3 { font-size: var(--text-xl);        margin-block: var(--space-5) var(--space-3); }
+h4 { font-size: var(--text-lg);        margin-block: var(--space-4) var(--space-2); }
+
+/* Figures and lists get predictable spacing */
+figure, ul, ol { margin-block: var(--space-4); }
+li { margin-block: var(--space-2); }
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+/* ---------- Aspect-Ratio Utilities ---------- */
+.u-aspect-1-1   { aspect-ratio: 1 / 1; }
+.u-aspect-4-3   { aspect-ratio: 4 / 3; }
+.u-aspect-3-2   { aspect-ratio: 3 / 2; }
+.u-aspect-16-9  { aspect-ratio: 16 / 9; }
+.u-aspect-21-9  { aspect-ratio: 21 / 9; }
+
+/* Object-fit helpers for media inside aspect boxes */
+.u-object-cover { object-fit: cover; }
+.u-object-contain { object-fit: contain; }
+.u-object-center { object-position: center; }
+
+/* ---------- Container-Query Visibility ---------- */
+/*
+  Usage:
+  1) Wrap a section in a container to scope queries:
+     <section class="u-cq"> ... </section>
+  2) Apply visibility helpers to children inside that container.
+
+  Semantics:
+  - .u-hide-sm     -> hide on small containers (width < --cq-sm)
+  - .u-hide-md     -> hide on medium and down (width < --cq-md)
+  - .u-hide-lg     -> hide on large and down (width < --cq-lg)
+  - .u-hide-xl     -> hide on extra large and down (width < --cq-xl)
+
+  - .u-hide-sm-up  -> hide at sm and UP (width >= --cq-sm)
+  - .u-hide-md-up  -> hide at md and UP (width >= --cq-md)
+  - .u-hide-lg-up  -> hide at lg and UP (width >= --cq-lg)
+  - .u-hide-xl-up  -> hide at xl and UP (width >= --cq-xl)
+*/
+
+/* Opt-in container (inline-size for layout responsiveness) */
+.u-cq { container-type: inline-size; }
+
+/* Hide on small & down */
+@container (width < var(--cq-sm))  { .u-hide-sm   { display: none !important; } }
+@container (width < var(--cq-md))  { .u-hide-md   { display: none !important; } }
+@container (width < var(--cq-lg))  { .u-hide-lg   { display: none !important; } }
+@container (width < var(--cq-xl))  { .u-hide-xl   { display: none !important; } }
+
+/* Hide at and above */
+@container (width >= var(--cq-sm)) { .u-hide-sm-up { display: none !important; } }
+@container (width >= var(--cq-md)) { .u-hide-md-up { display: none !important; } }
+@container (width >= var(--cq-lg)) { .u-hide-lg-up { display: none !important; } }
+@container (width >= var(--cq-xl)) { .u-hide-xl-up { display: none !important; } }

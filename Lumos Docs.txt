@@ -1,0 +1,1490 @@
+Lumos Framework
+
+# Consistency at Scale
+
+{% embed url="https://www.youtube.com/watch?v=GPRcAZLuT3U" %}
+
+Lumos is a cutting-edge framework for building Webflow sites. It's designed with efficiency, scaleability, and accessibility at its core.&#x20;
+
+It's unique approach to class naming, components, layout, & responsiveness brings together all of the modern best-practices of web development in a format that's now accessible to Webflow Developers.
+
+Ready to become unstoppable? Dive in!
+
+# Breakpointless
+
+{% embed url="https://www.youtube.com/watch?v=Yq8Snsh40fE" %}
+
+## Most Webflow Layouts Are Broken
+
+* When a user doubles their preferred font size, no text should overflow.
+* Because Webflow breakpoints are set with PX, the layout doesn't wrap when a user increases their preferred font size and text overflows.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2F7DRmiMd147TXyQEpjyKx%2F0.png?alt=media&#x26;token=0c2fe0e1-6b60-43f7-9746-a8bad317d34c" alt=""><figcaption></figcaption></figure></div>
+
+## Benefits of Building Without Breakpoints
+
+* Improves accessibility by allowing layouts to wrap when users increase their font size
+* Creates less code than manually defining styles on each breakpoint
+* Allows for faster development since styles are automatically responsive
+* Makes future design changes easier, since updates only have to be made in one place
+
+## Techniques For Breakpointless Builds
+
+Apply no styles to the tablet, mobile landscape, or mobile portrait breakpoints. Do this instead.
+
+### 1. Enable wrapping for any horizontal flexboxes
+
+* This lets the browser decide when the layout should wrap.
+* If new links are added later, if the user translates the site into a longer language, or if the user increases their preferred font size, the layout will still wrap before we run out of space.
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2Fqa9XULllgAN0acIgqnxO%2F1.png?alt=media&#x26;token=18339e30-40fa-40f6-8366-28e325fed629" alt=""><figcaption></figcaption></figure>
+
+### 2. Use [autofit and autofill](../grid#u-grid-autofit-and-u-grid-autofill) grids
+
+* Automatically responsive: The number of columns adjusts based on the available space and the minimum column size we define.
+* If the content or font sizes change later, we can update our minimum column size from one place instead of needing to update each breakpoint manually.
+
+### 3. Use flex basis ([example](https://preview.webflow.com/preview/flex-basis-example?utm_medium=preview_link\&utm_source=designer\&utm_content=flex-basis-example\&preview=ff8e3a50de8ad7d7ccdaa62c9f36f6b9\&workflow=canvas))
+
+#### Step 1: Enable wrapping on a flex parent
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FAwhz8siTat4oeroVCwpC%2F1.png?alt=media&#x26;token=bb8f9f2d-5802-4d76-9a20-42a188b5ab84" alt="" width="375"><figcaption></figcaption></figure></div>
+
+#### Step 2: Apply grow 1, shrink 1, and a width to the first child
+
+Element will remain 6rem wide until the layout wraps. Once the layout wraps, element will become full width.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2Fq6H29A9PDjkhelzhTv66%2F2.png?alt=media&#x26;token=34ab7ea6-662b-4d82-865c-953b77feda55" alt="" width="375"><figcaption></figcaption></figure></div>
+
+#### Step 3: Apply grow 500, shrink 1, and a width to the second child
+
+Second child will fill all remaining space. Layout will wrap before second child gets smaller than 13rem.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FtRhsiPF6NNMxKGaQsXmR%2F3.png?alt=media&#x26;token=4320bf93-1ffc-4131-b498-38a6d985fb96" alt="" width="375"><figcaption></figcaption></figure></div>
+
+### 4. [Use accessible fluid typography](https://fluidbuilder.timothyricks.com/)
+
+* Breakpoint font sizes overflow when users double their font size because the changes designed for smaller screens aren’t triggered.
+* Fluid sizes create a smoother zoom experience, adapt better across screen sizes, and are easier to maintain within a type scale.
+
+### 5. Avoid all px units
+
+* PX scales with browser zoom but not with user font size, similar to VW which ignores both.
+* Using PX for borders, radius, and shadows makes them feel smaller and off-scale when users increase their font size.
+* PX padding can overflow when inside a REM-based container.
+
+### 6. Use container queries when needed
+
+* Give the container or any parent a custom property of container-type: inline-size;
+* Add custom css to affect the container’s children when the container is larger or smaller than a set size.
+
+```html
+<style>
+@container (width < 40em) {
+    .hero_layout { display: flex; }
+    .hero_content { order: -1; }
+}
+</style>
+```
+
+## Using GSAP Or JS With Container Queries
+
+Use match-container.js to run different JavaScript depending on the container size. In this example, .observeContainer is attached to the heading, but it can be attached to any child of the container query.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/flowtricks/script@v1.0.4/match-container.js"></script>
+<script>
+document.querySelectorAll(".hero_section").forEach(function (section) {
+  const heading = section.querySelector(".hero_heading");
+  const paragraph = section.querySelector(".hero_paragraph");
+  heading.observeContainer("(width < 40em)", (match) => {
+    if (match) {
+      gsap.to(heading, { color: "red" });
+      gsap.to(paragraph, { opacity: 0.5 });
+    } else {
+      gsap.to(heading, { color: "green" });
+      gsap.to(paragraph, { opacity: 1 });
+    }
+  });
+});
+</script>
+```
+
+{% embed url="https://www.youtube.com/watch?v=rWmQf2KFR4k" %}
+
+
+
+# Class Naming
+
+## Intro to Lumos Class Naming Convention
+
+### 1. Custom Classes
+
+When building custom sections, **every element must have a custom class.** It allows for easily targeting elements with custom css, clear labels in the navigator, and global design updates to each element with that custom class. With practice & the [Lumos Chrome Extension](../resources/chrome-extension), the process of creating custom classes becomes effortless. As long as the prefix is unique for each component type, the element names like "layout", "content", "visual", "title", or "text" are highly reusable. Custom classes...
+
+* Contain underscores instead of dashes
+* Must never have more than 3 underscores
+* Must be applied to every element
+* Must always be the first class applied to an element
+* `_wrap` marks the start of a new component.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2Fl57rRFkdNI2pLQ4xNHDc%2F1.png?alt=media&#x26;token=80001271-b270-4717-86da-92e806931329" alt=""><figcaption></figcaption></figure></div>
+
+{% hint style="info" %}
+Three parts: `type_variation(optional)_element`
+
+In this example, hero is the `type` of section. Secondary is the `variation` if there's multiple types of hero sections. Wrap, contain, title, & text are all elements belonging to the `hero_secondary_`  section.
+{% endhint %}
+
+***
+
+#### Child Group (Custom Classes)
+
+A grouping of related elements within a parent group.
+
+In this example, `.footer_link_wrap` is a child group inside the `.footer_wrap` parent group. This prevents naming collisions when both groups have children with the same names such as `_text`.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FQYVVbajq7lOaBQ0yiQKl%2F2.png?alt=media&#x26;token=08b5a01e-4d68-4eb1-af7a-050f828604aa" alt="" width="255"><figcaption></figcaption></figure></div>
+
+***
+
+### 2. Utility Classes
+
+Utility classes can help us work faster when applying a grouping of styles that we'll reuse often. Try to not over stack utilities. Apply styles like margin or flexbox to the custom class when possible.
+
+* Start with `u-`
+* Contain dashes, not underscores
+* Should always be stacked on top of a custom class
+* Can be used in any section of the website
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FBa7MCUCVQb28stHBJyNy%2F0.png?alt=media&#x26;token=fde048f7-d0e0-4e44-80d3-52c803eddafb" alt="" width="260"><figcaption></figcaption></figure></div>
+
+***
+
+#### Utility Overrides
+
+It's recommended to apply style overrides to the custom component class, but style overrides can be applied to the utility without affecting other instances of that same utility as long as the utility is stacked on a custom class.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FujqvvKWTSZZTLtMpYPR9%2F1.png?alt=media&#x26;token=f80774e1-a354-4ced-954c-24b06e359581" alt="" width="263"><figcaption></figcaption></figure></div>
+
+***
+
+#### Utility Renaming
+
+When a utility class is stacked on a custom class, we can rename the utility to swap it out for a different one. Any overrides we applied to this instance of the utility will stay in place. Renaming this "u-text-style-h2" class to "u-text-style-h3" will not change the global "u-text-style-h2" class. It will only rename the class that was stacked on top of every hero\_title element throughout our site.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2Fbs16nczXHW48YwurAZZY%2F2.png?alt=media&#x26;token=3966b61c-6906-4cee-8730-9c7b8d5db9ef" alt="" width="262"><figcaption></figcaption></figure></div>
+
+{% hint style="info" %}
+If Webflow says a class name "already exist" when renaming, rename the class to `u-`. After that class is renamed, change it back to the full class name.
+{% endhint %}
+
+***
+
+#### Creating New Utilities
+
+* Create the class on an element that has no other classes.
+* Start class name with `u-` followed by the broadest search term possible.
+* Example: searching `u-text-` shows all text related classes. Searching `u-text-transform-` filters down to all text transform classes.
+* Add the new class inside the styleguide page to prevent removal during class cleanup.
+
+{% hint style="info" %}
+When adding a new utility, reorder it in the stylesheet using the Finsweet Chrome Extension to avoid any specificity issues. Utilities should be above any custom component classes in the stylesheet. Utilities with multiple styles applied should be above utilities with only a single style applied.\
+[https://www.youtube.com/watch?v=lUQSmFiS3BY](https://www.youtube.com/watch?v=lUQSmFiS3BY)
+{% endhint %}
+
+***
+
+### 3. Component Classes
+
+Designed for one time use within a single component.
+
+* Start with `c-`
+* Contain dashes, not underscores
+* Have less specificity than utilities so utilities can override them
+* Not used anywhere else throughout the site
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2F91d9JGdCSM549KzmrMKN%2F1.png?alt=media&#x26;token=80391d8c-355e-4e9f-98a4-5dc48b859757" alt="" width="237"><figcaption></figcaption></figure></div>
+
+***
+
+### 4. Combo Classes
+
+Applies specific modifications to an element
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2F6NcNQk6PRkmp6twmsBu1%2F5.png?alt=media&#x26;token=bfc43675-bbf8-4fe4-aa00-65d7dc5a311e" alt="" width="358"><figcaption></figcaption></figure></div>
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2F1zJQrZb8hxpFhr8JGpC7%2F6.png?alt=media&#x26;token=a358ca7a-0254-4c7f-929f-0c6f44cc1b8a" alt="" width="359"><figcaption></figcaption></figure></div>
+
+* Start with `is-`
+* Contain dashes, not underscores
+* Modify an existing class
+* Should be created on top of a component class (not on top of utilities)
+
+&#x20;
+
+
+# Page Structure
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FNCxlHskN63b0XARurTAv%2F1.png?alt=media&#x26;token=d573d9ab-5b0c-484d-aa2f-99c5a4f72f3f" alt="" width="306"><figcaption></figcaption></figure></div>
+
+### page\_wrap
+
+* Contains all page content
+* Used for copying content to another page
+* Set to overflow clip to prevent horizontal scroll
+* Has a min height of 100svh and display flex to keep the footer anchored to the bottom of the screen
+
+### Global Styles
+
+* Contains CSS used across all site pages
+
+### Global Guides
+
+* Optional overlay to check how elements are aligning with each other across sections
+* Automatically hides inside preview and on the published site
+
+### Nav
+
+* Add your custom nav that should be used across every page
+
+### Page Slot (page\_main)
+
+* Contains all section components that are unique to this page
+* Is a page slot so clients can add and reorder sections in build mode
+* Does not contain the navbar or footer
+* Tagged as “Main” for SEO & Screen Readers
+* Has an ID of "main" so we can anchor link to it with skip to main buttons
+
+### Footer
+
+* Add your custom footer that should be used across every page
+
+
+
+
+# Page Structure
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FNCxlHskN63b0XARurTAv%2F1.png?alt=media&#x26;token=d573d9ab-5b0c-484d-aa2f-99c5a4f72f3f" alt="" width="306"><figcaption></figcaption></figure></div>
+
+### page\_wrap
+
+* Contains all page content
+* Used for copying content to another page
+* Set to overflow clip to prevent horizontal scroll
+* Has a min height of 100svh and display flex to keep the footer anchored to the bottom of the screen
+
+### Global Styles
+
+* Contains CSS used across all site pages
+
+### Global Guides
+
+* Optional overlay to check how elements are aligning with each other across sections
+* Automatically hides inside preview and on the published site
+
+### Nav
+
+* Add your custom nav that should be used across every page
+
+### Page Slot (page\_main)
+
+* Contains all section components that are unique to this page
+* Is a page slot so clients can add and reorder sections in build mode
+* Does not contain the navbar or footer
+* Tagged as “Main” for SEO & Screen Readers
+* Has an ID of "main" so we can anchor link to it with skip to main buttons
+
+### Footer
+
+* Add your custom footer that should be used across every page
+
+
+
+# Color
+
+## Swatches
+
+* Add the core swatches used in the design
+* Add extra variables if needed for styles like brand-secondary-500, brand-secondary-text, and so on.
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FcHxb2uawn898VpszKrFL%2F1.png?alt=media&#x26;token=e41a61ae-4a03-427b-badc-49eeff50dfbd" alt=""><figcaption></figcaption></figure>
+
+{% hint style="info" %}
+Whenever `--swatch--brand-500` is applied as a background color, `--swatch--brand-text` is applied as its font color. If the brand color ever needs to change in the future to a darker color that requires light text, we can update that brand-text color from one place.
+{% endhint %}
+
+## Theme variable collection
+
+* Set the section's background, text, & border colors across all modes
+* Set the primary (solid) & secondary (outlined) button styles across all modes
+* Add additional folders inside the Theme collection if needed for styles like card/background, input/border-hover, input/border-focus, and so on.
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FuxtjprIYNNgeyzPCMMth%2F1.png?alt=media&#x26;token=0421a481-8053-44a0-bdc9-c185a3896447" alt=""><figcaption></figcaption></figure>
+
+## Button Style variable collection
+
+* Reference the button styles created in the Theme collection so that each button style automatically updates in both light and dark mode.
+* Add any additional button style modes if needed.
+* Apply these button style variables to any buttons
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FbsJvljgXC4WPsqPpGc0I%2F1.png?alt=media&#x26;token=0548f74b-fa1d-4699-8768-7505011a2738" alt=""><figcaption></figcaption></figure>
+
+## Connecting Button Style to Component Props
+
+1. Create a component variant for the secondary button style
+2. Switch the mode to the secondary mode
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2F9hY3w8nsrqkYhdh168uJ%2F0.png?alt=media&#x26;token=c1cccaa0-3aca-4f34-8875-4c896192ef04" alt="" width="353"><figcaption></figcaption></figure></div>
+
+## Connecting Theme to Component Props
+
+### 1. Create component variants for Inherit, Light, Dark, and any other themes
+
+The inherit variant should have no theme applied. It will inherit the theme of the page.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FWx2nlGpL8JSMUI6BKw3a%2F0.png?alt=media&#x26;token=abab61a5-f855-45a4-98b5-e2dd6f2a1b7e" alt="" width="359"><figcaption></figcaption></figure></div>
+
+### 2. Apply the theme/text variable and theme/background variable to the base variant
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FvnO8OFiGSOtWo5HFfn9X%2F0.png?alt=media&#x26;token=11a796e9-790e-45ba-80a5-9db3d57a909a" alt="" width="241"><figcaption></figcaption></figure></div>
+
+### 3. Apply the related theme to each variant
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FJIex9FGxehZIT6NCGGM2%2F2.png?alt=media&#x26;token=a9382229-730e-4c89-9d22-2f962bf722b8" alt="" width="241"><figcaption></figcaption></figure></div>
+
+## Animating between themes with GSAP
+
+* This script retrieves all variables from the Theme variable collection.
+* Any classes starting with "u-theme-" will be included as themes we can animate between.
+* Any classes starting with "u-brand-" will be included as brands we can animate between.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/lumosframework/scripts@v1.1.1/theme-collector.js"></script>
+<script>
+document.addEventListener("colorThemesReady", () => {
+  gsap.to(".my-element", { ...colorThemes.getTheme("dark", "3") });
+});
+</script>
+```
+
+### With Per Page CSS
+
+If using Per Page CSS, use this version instead and ensure the u-theme- classes are included on every page of your site.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/lumosframework/scripts@v1.1.2/themecollector.js"></script>
+<script>
+document.addEventListener("colorThemesReady", () => {
+  gsap.to(".my-element", { ...colorThemes.getTheme("dark", "3") });
+});
+</script>
+```
+
+If we have classes of u-theme-dark and u-brand-orange, we can animate to those modes like so...
+
+```javascript
+document.addEventListener("colorThemesReady", () => {
+  gsap.to(".my-element", { ...colorThemes.getTheme("dark", "orange") });
+});
+```
+
+If we only have theme classes and no brand classes, we can animate between themes like so...
+
+```javascript
+document.addEventListener("colorThemesReady", () => {
+  gsap.to(".my-element", { ...colorThemes.getTheme("dark") });
+});
+```
+
+{% embed url="https://try.webflow.com/tricks?path=animate-native-color-modes" %}
+
+{% embed url="https://www.youtube.com/watch?v=nm65TDo96cQ" %}
+
+### Light Mode / Dark Mode Switcher
+
+{% embed url="https://try.webflow.com/tricks?path=variable-modes-toggle" %}
+
+
+
+# Color
+
+## Swatches
+
+* Add the core swatches used in the design
+* Add extra variables if needed for styles like brand-secondary-500, brand-secondary-text, and so on.
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FcHxb2uawn898VpszKrFL%2F1.png?alt=media&#x26;token=e41a61ae-4a03-427b-badc-49eeff50dfbd" alt=""><figcaption></figcaption></figure>
+
+{% hint style="info" %}
+Whenever `--swatch--brand-500` is applied as a background color, `--swatch--brand-text` is applied as its font color. If the brand color ever needs to change in the future to a darker color that requires light text, we can update that brand-text color from one place.
+{% endhint %}
+
+## Theme variable collection
+
+* Set the section's background, text, & border colors across all modes
+* Set the primary (solid) & secondary (outlined) button styles across all modes
+* Add additional folders inside the Theme collection if needed for styles like card/background, input/border-hover, input/border-focus, and so on.
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FuxtjprIYNNgeyzPCMMth%2F1.png?alt=media&#x26;token=0421a481-8053-44a0-bdc9-c185a3896447" alt=""><figcaption></figcaption></figure>
+
+## Button Style variable collection
+
+* Reference the button styles created in the Theme collection so that each button style automatically updates in both light and dark mode.
+* Add any additional button style modes if needed.
+* Apply these button style variables to any buttons
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FbsJvljgXC4WPsqPpGc0I%2F1.png?alt=media&#x26;token=0548f74b-fa1d-4699-8768-7505011a2738" alt=""><figcaption></figcaption></figure>
+
+## Connecting Button Style to Component Props
+
+1. Create a component variant for the secondary button style
+2. Switch the mode to the secondary mode
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2F9hY3w8nsrqkYhdh168uJ%2F0.png?alt=media&#x26;token=c1cccaa0-3aca-4f34-8875-4c896192ef04" alt="" width="353"><figcaption></figcaption></figure></div>
+
+## Connecting Theme to Component Props
+
+### 1. Create component variants for Inherit, Light, Dark, and any other themes
+
+The inherit variant should have no theme applied. It will inherit the theme of the page.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FWx2nlGpL8JSMUI6BKw3a%2F0.png?alt=media&#x26;token=abab61a5-f855-45a4-98b5-e2dd6f2a1b7e" alt="" width="359"><figcaption></figcaption></figure></div>
+
+### 2. Apply the theme/text variable and theme/background variable to the base variant
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FvnO8OFiGSOtWo5HFfn9X%2F0.png?alt=media&#x26;token=11a796e9-790e-45ba-80a5-9db3d57a909a" alt="" width="241"><figcaption></figcaption></figure></div>
+
+### 3. Apply the related theme to each variant
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FJIex9FGxehZIT6NCGGM2%2F2.png?alt=media&#x26;token=a9382229-730e-4c89-9d22-2f962bf722b8" alt="" width="241"><figcaption></figcaption></figure></div>
+
+## Animating between themes with GSAP
+
+* This script retrieves all variables from the Theme variable collection.
+* Any classes starting with "u-theme-" will be included as themes we can animate between.
+* Any classes starting with "u-brand-" will be included as brands we can animate between.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/lumosframework/scripts@v1.1.1/theme-collector.js"></script>
+<script>
+document.addEventListener("colorThemesReady", () => {
+  gsap.to(".my-element", { ...colorThemes.getTheme("dark", "3") });
+});
+</script>
+```
+
+### With Per Page CSS
+
+If using Per Page CSS, use this version instead and ensure the u-theme- classes are included on every page of your site.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/lumosframework/scripts@v1.1.2/themecollector.js"></script>
+<script>
+document.addEventListener("colorThemesReady", () => {
+  gsap.to(".my-element", { ...colorThemes.getTheme("dark", "3") });
+});
+</script>
+```
+
+If we have classes of u-theme-dark and u-brand-orange, we can animate to those modes like so...
+
+```javascript
+document.addEventListener("colorThemesReady", () => {
+  gsap.to(".my-element", { ...colorThemes.getTheme("dark", "orange") });
+});
+```
+
+If we only have theme classes and no brand classes, we can animate between themes like so...
+
+```javascript
+document.addEventListener("colorThemesReady", () => {
+  gsap.to(".my-element", { ...colorThemes.getTheme("dark") });
+});
+```
+
+{% embed url="https://try.webflow.com/tricks?path=animate-native-color-modes" %}
+
+{% embed url="https://www.youtube.com/watch?v=nm65TDo96cQ" %}
+
+### Light Mode / Dark Mode Switcher
+
+{% embed url="https://try.webflow.com/tricks?path=variable-modes-toggle" %}
+
+
+
+# Color
+
+## Swatches
+
+* Add the core swatches used in the design
+* Add extra variables if needed for styles like brand-secondary-500, brand-secondary-text, and so on.
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FcHxb2uawn898VpszKrFL%2F1.png?alt=media&#x26;token=e41a61ae-4a03-427b-badc-49eeff50dfbd" alt=""><figcaption></figcaption></figure>
+
+{% hint style="info" %}
+Whenever `--swatch--brand-500` is applied as a background color, `--swatch--brand-text` is applied as its font color. If the brand color ever needs to change in the future to a darker color that requires light text, we can update that brand-text color from one place.
+{% endhint %}
+
+## Theme variable collection
+
+* Set the section's background, text, & border colors across all modes
+* Set the primary (solid) & secondary (outlined) button styles across all modes
+* Add additional folders inside the Theme collection if needed for styles like card/background, input/border-hover, input/border-focus, and so on.
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FuxtjprIYNNgeyzPCMMth%2F1.png?alt=media&#x26;token=0421a481-8053-44a0-bdc9-c185a3896447" alt=""><figcaption></figcaption></figure>
+
+## Button Style variable collection
+
+* Reference the button styles created in the Theme collection so that each button style automatically updates in both light and dark mode.
+* Add any additional button style modes if needed.
+* Apply these button style variables to any buttons
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FbsJvljgXC4WPsqPpGc0I%2F1.png?alt=media&#x26;token=0548f74b-fa1d-4699-8768-7505011a2738" alt=""><figcaption></figcaption></figure>
+
+## Connecting Button Style to Component Props
+
+1. Create a component variant for the secondary button style
+2. Switch the mode to the secondary mode
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2F9hY3w8nsrqkYhdh168uJ%2F0.png?alt=media&#x26;token=c1cccaa0-3aca-4f34-8875-4c896192ef04" alt="" width="353"><figcaption></figcaption></figure></div>
+
+## Connecting Theme to Component Props
+
+### 1. Create component variants for Inherit, Light, Dark, and any other themes
+
+The inherit variant should have no theme applied. It will inherit the theme of the page.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FWx2nlGpL8JSMUI6BKw3a%2F0.png?alt=media&#x26;token=abab61a5-f855-45a4-98b5-e2dd6f2a1b7e" alt="" width="359"><figcaption></figcaption></figure></div>
+
+### 2. Apply the theme/text variable and theme/background variable to the base variant
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FvnO8OFiGSOtWo5HFfn9X%2F0.png?alt=media&#x26;token=11a796e9-790e-45ba-80a5-9db3d57a909a" alt="" width="241"><figcaption></figcaption></figure></div>
+
+### 3. Apply the related theme to each variant
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FJIex9FGxehZIT6NCGGM2%2F2.png?alt=media&#x26;token=a9382229-730e-4c89-9d22-2f962bf722b8" alt="" width="241"><figcaption></figcaption></figure></div>
+
+## Animating between themes with GSAP
+
+* This script retrieves all variables from the Theme variable collection.
+* Any classes starting with "u-theme-" will be included as themes we can animate between.
+* Any classes starting with "u-brand-" will be included as brands we can animate between.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/lumosframework/scripts@v1.1.1/theme-collector.js"></script>
+<script>
+document.addEventListener("colorThemesReady", () => {
+  gsap.to(".my-element", { ...colorThemes.getTheme("dark", "3") });
+});
+</script>
+```
+
+### With Per Page CSS
+
+If using Per Page CSS, use this version instead and ensure the u-theme- classes are included on every page of your site.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/lumosframework/scripts@v1.1.2/themecollector.js"></script>
+<script>
+document.addEventListener("colorThemesReady", () => {
+  gsap.to(".my-element", { ...colorThemes.getTheme("dark", "3") });
+});
+</script>
+```
+
+If we have classes of u-theme-dark and u-brand-orange, we can animate to those modes like so...
+
+```javascript
+document.addEventListener("colorThemesReady", () => {
+  gsap.to(".my-element", { ...colorThemes.getTheme("dark", "orange") });
+});
+```
+
+If we only have theme classes and no brand classes, we can animate between themes like so...
+
+```javascript
+document.addEventListener("colorThemesReady", () => {
+  gsap.to(".my-element", { ...colorThemes.getTheme("dark") });
+});
+```
+
+{% embed url="https://try.webflow.com/tricks?path=animate-native-color-modes" %}
+
+{% embed url="https://www.youtube.com/watch?v=nm65TDo96cQ" %}
+
+### Light Mode / Dark Mode Switcher
+
+{% embed url="https://try.webflow.com/tricks?path=variable-modes-toggle" %}
+
+
+# Sizes & Spacing
+
+## Size Variables
+
+
+
+### Benefits
+
+* Provides visual consistency
+* Scales fluidly
+* Smoother experience with browser zoom
+* Reduces likelihood of overflowing text and cut off content
+
+***
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FPErgnFNcLlfRHQk2lH99%2F1.png?alt=media&#x26;token=2679895d-494c-4214-b386-9e8894ced609" alt="" width="375"><figcaption></figcaption></figure></div>
+
+#### site/viewport-max
+
+The max screen size at which all fluid sizes will stop scaling up (90rem by default)
+
+#### site/viewport-min
+
+The min screen size at which all fluid sizes will stop scaling down (20rem by default)
+
+#### site/margin
+
+The left and right space on the outside of our container that prevents it from touching the edge of the screen.
+
+Edit this through the [Fluid Builder App](https://fluidbuilder.timothyricks.com/).
+
+#### site/gutter
+
+The default gap applied between our grid columns. By default, this value is static, but we can make it fluid by using the Fluid Builder App.
+
+#### site/column-count
+
+The main column count used to create our design (usually 12 columns)
+
+#### site/column-width
+
+The variable used for our breakout grid class. Do not adjust this variable.
+
+***
+
+### Space Variable Folder
+
+This folder provides some general spacing that can be used to separate elements within a section. In the style panel, we can apply any of these space variables to space apart elements within a section. The smallest section top and bottom spacing is still larger than our space/8. This ensures that using this space folder will never make elements seem like they’re in two separate sections.
+
+Edit these values by using the Fluid Builder App.
+
+***
+
+### Section Space Variable Folder
+
+This folder is used as the top and bottom space within each section. The page-top variable is used whenever a section is at the top of the page to make space for the nav.
+
+***
+
+## Margin vs Gap
+
+Gap has many great use-cases like spacing apart a list of items or separating columns within grids. For spacing apart text elements, margins are usually more flexible and allow us to create unique space between each element type without needing extra divs.
+
+
+
+### Margin Trim
+
+Apply a class of "u-margin-trim" to any parent to remove the margin top from its first child and remove the margin bottom from its last child.
+
+
+
+### Collapsing Margins
+
+If a heading has margin-bottom: 2rem and the paragraph has margin-top: 1rem, the two margins will collapse into each other, and there will only be 2rem space total between the two elements. Collapsing margins do not apply to elements set to display: inline, inline-block, inline-flex, or inline-grid. So our margins should applied to display block, flex, or grid elements. Collapsing margins only apply to vertical margins, not horizontal margins. Lastly, margins do not collapse when their parent is display flex or display grid. The parent must be display block.
+
+
+
+&#x20;
+
+
+# Components
+
+## Components Strategy
+
+{% columns %}
+{% column %}
+#### Open Components
+
+Mainly uses component slots, allowing any element to be added
+
+Ideal for workflow speed and flexibility
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FTFn7N9yHrpvW7B7PzIe1%2F1.png?alt=media&#x26;token=c2f93ffc-9962-4d6d-ad62-158aa9d3071a" alt=""><figcaption></figcaption></figure></div>
+{% endcolumn %}
+
+{% column %}
+#### Closed Components
+
+Mainly uses component props to conditionally hide and show elements
+
+Ideal for consistency and reusability
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FmNrmi2hyVQCraBU19Dg1%2F1.png?alt=media&#x26;token=cd2fe15c-ea47-4fc9-90b7-fac5b8376b16" alt=""><figcaption></figcaption></figure>
+
+
+{% endcolumn %}
+{% endcolumns %}
+
+### Open Components
+
+**Open Components** make it easy to add new elements inside a component without extra setup. They’re best for one-off use cases or components that need lots of structural or styling flexibility. However, if you reuse an Open Component across your site and later want to make global design changes, like adjusting the row gap or heading size, you’ll need to update each instance manually.
+
+### Closed Components
+
+**Closed Components** require more setup time to create conditional props for each element that should be controllable, but they provide greater design, structure, and content consistency and can be easier for a non-developer to work with while reducing the chances of them breaking layout and functionality.
+
+### Turning an open component into a closed component&#x20;
+
+We can wrap an open component in a div and turn that div into a custom component.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2Febk6OVGVTpyFxHCx35wg%2F0.png?alt=media&#x26;token=8f544927-8324-4b93-aef2-927cc7f7ec2d" alt="" width="459"><figcaption></figcaption></figure></div>
+
+This allows us to surface certain props that should be unique for each instance of the component such as Heading Text while leaving other props such as Font Style globally updatable across all instances of that component.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FsubzPnncfdVskMHIh4DX%2F4.png?alt=media&#x26;token=a396e2a3-6b6a-4d12-91eb-865ac6990ac6" alt="" width="452"><figcaption></figcaption></figure></div>
+
+To access slots on the parent component, we need to nest a slot inside the existing slot. Give the nested slot a class of "u-display-contents" so that it will be ignored visually and its children will be treated like they are directly inside the original slot.
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FAcqOa4suuE7gvcxSG5Sk%2F0.png?alt=media&#x26;token=daf0eb17-62f9-4ff3-bc04-0ed340f277b2" alt=""><figcaption></figcaption></figure>
+
+
+
+### Duplicating A Component
+
+When we duplicate a component from the component panel, all of its component props (fields) get copied also. This makes duplicating a component a fast way to setup a new, similar component without manually recreating all of the fields.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2F8Hb3bhz0AqFHo2pO7R9X%2F0.png?alt=media&#x26;token=8278c5ec-d9ff-4bf4-9933-56c9ce72d93f" alt="" width="420"><figcaption></figcaption></figure></div>
+
+
+
+### Naming Webflow Components
+
+When naming the Webflow Components, component names should start with the broadest term possible. This allows us to filter while searching. If we type "Section", it will show all reusable section components used throughout our site. If we type "Section Hero", it will show all hero sections used throughout our site. Searching "Button" shows all button components. "Icon" shows all svg icons. "Form" shows all form-related elements.
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FZt4MxDnMwpeKCHekFc0C%2F0.png?alt=media&#x26;token=74e43d43-1d0c-421e-bbd2-f498938ef5a4" alt=""><figcaption></figcaption></figure>
+
+
+
+### Naming Component Slots
+
+Inside the component, double click on the slot's label to name it.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FboZ6g0iWwbC20mPtnulW%2F1.png?alt=media&#x26;token=0c42b8e3-b8d0-4268-aee6-68276f97e094" alt="" width="370"><figcaption></figcaption></figure></div>
+
+The slot's name should match the name of the child component so the client knows which component to add in.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FAxt7dupqUe3co9D8CYMw%2F0.png?alt=media&#x26;token=7555928d-509a-42a8-a3db-c6049a592f99" alt="" width="377"><figcaption></figcaption></figure></div>
+
+### Organizing Component Groups
+
+On section components, the `Section` folder should appear first and should contain all styles and properties related to the section element. The element folders should be next and be listed in the order that they appear within the section.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FOz73dUILTPZIJgOal7aY%2F1.png?alt=media&#x26;token=1e904338-3b0c-4064-b246-e353dffc1ce0" alt="" width="178"><figcaption></figcaption></figure></div>
+
+Within each group, element visibility should always appear first. Other fields should follow in the order of most commonly used appearing first.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FEPUtg6aTlv7FvdOFTkiG%2F1.png?alt=media&#x26;token=f88b9b3e-4da9-41bc-91ad-e2d2b0adb9b1" alt="" width="179"><figcaption></figcaption></figure></div>
+
+
+
+## All Default Components
+
+The following are all components that come in Lumos by default.
+
+
+
+***
+
+## Section Group
+
+Holds all custom sections for global reuse throughout the site
+
+***
+
+### • Section Custom (duplicate this)
+
+Use this only when you need custom control over the classes and structure of a section.
+
+In most cases, it's better to start with the generic "Section" component instead.
+
+Section Custom gives us direct access to the plain divs and elements that makeup a section and container. Allowing us to add custom classes to these elements and add non-component elements into the custom section without needing a slot.
+
+{% columns %}
+{% column %}
+1. Duplicate the component from the components panel
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2Fo7j94N4dqY0og7Uy3kcQ%2F1.png?alt=media&#x26;token=92c09542-583f-4540-95fd-9ac029f4b05e" alt=""><figcaption></figcaption></figure>
+{% endcolumn %}
+
+{% column %}
+2. Give the component a custom name
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FFQcVE5vQcNtRjXfmBwJI%2F2.png?alt=media&#x26;token=45d69397-fbef-4e88-8b4c-ce6af25742b3" alt=""><figcaption></figcaption></figure>
+{% endcolumn %}
+{% endcolumns %}
+
+{% columns %}
+{% column %}
+3. Duplicate the existing custom classes on the section and container and turn them into unique names such as hero\_wrap and hero\_contain
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FktNSUNa6DMQsA5NVagOZ%2F3.png?alt=media&#x26;token=7ce6658e-c786-4db7-a4da-5d55e00a8384" alt=""><figcaption></figcaption></figure>
+{% endcolumn %}
+
+{% column %}
+4. Remove any props and elements that you don't need
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2Flet5LMb2lZYuOBDtunq8%2F4.png?alt=media&#x26;token=6201bf1f-b764-4842-a049-5a588412ea15" alt=""><figcaption></figcaption></figure>
+{% endcolumn %}
+{% endcolumns %}
+
+***
+
+## Button Group
+
+Holds all button components that can be used by the client
+
+***
+
+### Buton Main
+
+The main button structure used throughout our site.&#x20;
+
+* Contains the "Global / Clickable" component so it can include a link tag or button tag
+* btn\_main\_text set to aria-hidden="true" so that content inside it is not read by screen readers and only the text in the link is read by screen readers.
+
+***
+
+### Button Play
+
+Contains a play icon and pause icon that can be toggled with JavaScript or Custom CSS
+
+***
+
+### Button Arrow
+
+Contains an arrow button used for slider controls with variants for switching the arrow direction
+
+***
+
+### Button Close
+
+Contains a close button used for modal close and any other close buttons on the website
+
+***
+
+### Button Text Link
+
+Text Link component used throughout the site
+
+***
+
+## Card Group
+
+Holds all card related components
+
+***
+
+### Card Primary
+
+Main card style used throughout the site
+
+***
+
+## Form Group
+
+Holds all form related components
+
+***
+
+### Form
+
+Built with custom elements, this form element contains a slot where we can add any form fields and create custom forms in Build Mode by simply changing the form name.
+
+The native Webflow Form element gives more control such as allowing redirects and custom recipients for each form, but this custom element form allows us to create forms quickly in build mode even without designer access. (Form fields built with custom elements can be used inside both the native Webflow form element and this custom form element.&#x20;
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FJvrpkcb3DND4Gqkd9wd8%2F1.png?alt=media&#x26;token=2710b258-17a3-43b6-bed1-af5e3b003054" alt="" width="177"><figcaption></figcaption></figure></div>
+
+***
+
+### Form Checkbox
+
+Checkbox built with custom elements that allows us to keep our structure and style globally updatable site-wide
+
+***
+
+### Form Fieldset
+
+Group that can hold multiple related checkboxes or radio elements together
+
+***
+
+### Form Input
+
+Standard input element that can be used for names, emails, phone numbers, urls, passwords, or any other plain text content
+
+***
+
+### Form Radio
+
+Radio built with custom elements that allow us to our structure and style globally updatable site-wide
+
+***
+
+### Form Select
+
+Select element with a slot to hold select options
+
+Can be populated with a collection list to dynamically display select options
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FKEmTDaGCaxDGrneRs8li%2F0.png?alt=media&#x26;token=7a8b83a1-0c74-46f7-82fc-177a659f2fa6" alt="" width="336"><figcaption></figcaption></figure></div>
+
+***
+
+### Form Select Option
+
+Option elements that go inside a Form Select to create the select's choices&#x20;
+
+***
+
+### Form Textarea
+
+Text Area component built from custom elements
+
+***
+
+### Form Recaptcha
+
+Recaptcha component used across all forms
+
+Replace your site key on the data attribute and in site settings
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FrsDmV9CdUcCQ10FleAxk%2F1.png?alt=media&#x26;token=093e021e-4ec1-4a3b-8d05-02fdddc689ad" alt="" width="268"><figcaption></figcaption></figure></div>
+
+***
+
+## Global Group
+
+Holds components used on every page of the site such as the nav, footer, and global code
+
+***
+
+### Global Guides
+
+Gives a visual preview of grid guides. Helpful for checking alignment between sections
+
+***
+
+### Global Styles
+
+Contains CSS that should be used on every page of the site
+
+***
+
+### Nav
+
+Site-wide navbar
+
+***
+
+### Footer
+
+Site-wide footer
+
+***
+
+## Miscellaneous Group
+
+Holds child components that shouldn't be used directly but are part of large components
+
+***
+
+### Nav Banner
+
+Top notification banner for the nav. Can be turned on or off with component visibility
+
+***
+
+### Menu
+
+Holds all of the menu content. Has a variant for switching between desktop and mobile design
+
+***
+
+## Interactive Group
+
+Holds interactive, JavaScript-powered components
+
+***
+
+### Slider
+
+Swiper.js slider for CMS or static content with props for responsiveness, overflow, and slider settings
+
+{% embed url="https://www.youtube.com/watch?v=gkrDDB2ekC4" %}
+
+For CMS use, turn the collection wrapper into a component and place it inside the slider's slot.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FX6IdpjpUdIAWjd5nCwhY%2F1.png?alt=media&#x26;token=46cf8788-f14b-492b-b59d-cfb3318c410f" alt="" width="288"><figcaption></figcaption></figure></div>
+
+To connect the slider to controls that are outside of the Slider component, give the section an attribute of data-slider="component". Give any buttons the attributes of data-slider="previous" and data-slider="next"
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FMpLOVe65slg2deaDMJZx%2F0.png?alt=media&#x26;token=c0918f11-6fd3-489c-bc7a-ac9c9289242b" alt="" width="322"><figcaption></figcaption></figure></div>
+
+***
+
+### Accordion List
+
+Holds accordion items.&#x20;
+
+For CMS use, add a collection list into the slot.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FgTDjWDqxzWdJ73e4o3ZK%2F1.png?alt=media&#x26;token=aeeecead-f55b-42a8-9bda-789c23892f42" alt="" width="300"><figcaption></figcaption></figure></div>
+
+***
+
+### Accordion Item
+
+Goes inside the Accordion List component
+
+***
+
+### Modal
+
+{% embed url="https://www.youtube.com/watch?v=X0NDtprGMxI" %}
+
+#### Give the modal an ID
+
+Each modal must have a unique ID. When using a modal inside a CMS Item, use the CMS Item's slug as the ID.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FliHAjzSyPB37YHJgiHSp%2F2.png?alt=media&#x26;token=1491a1ce-5532-41b6-a096-5022ec3773d7" alt="" width="375"><figcaption></figcaption></figure></div>
+
+#### Connect a button to the modal
+
+Give button an attribute name of data-modal-trigger
+
+Give button an attribute value that matches the ID of your modal
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2Fwu4RS10SNReesk9R0IWI%2F0.png?alt=media&#x26;token=a74cd0f3-d6b1-478b-8156-54ca6a74dd90" alt="" width="375"><figcaption></figcaption></figure></div>
+
+#### Open modal from a different page
+
+Include `?modal-id=modal-1` behind the url
+
+The following link goes to the about page and opens modal-1 on the about page.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FzgpiuOZ03MJAHSGvmReg%2F1.png?alt=media&#x26;token=951ec445-9b30-4482-83d1-b0eec5840de7" alt="" width="353"><figcaption></figcaption></figure></div>
+
+#### Open a modal with JS
+
+```javascript
+lumos.modal.open("modal-1");
+```
+
+#### Close all modals with JS
+
+```javascript
+lumos.modal.closeAll();
+```
+
+#### Run code when a modal opens
+
+```javascript
+window.addEventListener("modal-open", (e) => {
+  console.log(e.detail);
+});
+```
+
+#### Run code when a modal closes
+
+```javascript
+window.addEventListener("modal-close", (e) => {
+  console.log(e.detail);
+});
+```
+
+#### Rerun modal setup when new modals are added to the page
+
+```javascript
+createModals();
+```
+
+***
+
+### Tab
+
+Interactive Tabs Component
+
+{% embed url="https://www.youtube.com/watch?v=M7ISPNENLe4" %}
+
+#### Using With The CMS
+
+We can add a collection list inside the Tab Link and Tab Content slots. You may need to turn the collection wrapper into a component to nest it in the slot.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2Fk33b74M3YB3tnybjQ1yo%2F1.png?alt=media&#x26;token=e17158da-234e-4fac-ad21-5f13463646ce" alt="" width="210"><figcaption></figcaption></figure></div>
+
+#### Open tabs from a different page
+
+Give the Tab component a unique Component ID
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FLT5V96ott9pDjdV05Ofq%2F0.png?alt=media&#x26;token=92d90a9b-74fd-415c-b0e8-38bf4fe4ded2" alt="" width="259"><figcaption></figcaption></figure></div>
+
+Give the Tab Link component a unique Item ID (can use the CMS Item's slug)
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FH36MaQbgjnkB6AIsee6C%2F1.png?alt=media&#x26;token=3261a4dc-fef1-4c3e-89eb-51f9ae3b23c7" alt="" width="261"><figcaption></figcaption></figure></div>
+
+Point the link block to the correct page, tab component, and tab item. (This one links to the about page, services tab component, and marketing tab item.
+
+```
+/about?tab-id=services-marketing
+```
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2Fa2lyyokFoouGmyg4ikL0%2F2.png?alt=media&#x26;token=7fd7e451-351f-4347-a203-2e81d8d45d12" alt="" width="258"><figcaption></figcaption></figure></div>
+
+***
+
+### Tab Link
+
+Use inside the Tab component
+
+***
+
+## Layout Group
+
+Holds layout components with empty slots designed for holding different types of elements
+
+***
+
+### Button Wrapper
+
+Horizontal flexbox for stacking buttons side by side
+
+Horizontal alignment inherits from the alignment mode of the section or parent
+
+Customize the gap and margin of the wrapper by using classes
+
+***
+
+### Content Wrapper
+
+Designed to hold content like headings, paragraphs, and buttons together
+
+Has a variant for setting horizontal alignment of children to left, center, or right
+
+***
+
+### Grid
+
+* Variant for setting max column count
+* Switch between an auto-fit or auto-fill grid
+* Set min column width
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FB0F6pSpf8ah5n2UF3Cz6%2F0.png?alt=media&#x26;token=370b831b-de85-4b7a-a5a9-d8537baf070b" alt="" width="354"><figcaption></figcaption></figure></div>
+
+Switch to a different grid type by using classes like u-grid-above if needed
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FWjCVrNKIHocnOH0cjmqK%2F1.png?alt=media&#x26;token=a8c6fdc0-9d74-4dbc-b2c3-05149cbf681c" alt="" width="359"><figcaption></figcaption></figure></div>
+
+***
+
+### Block (Previously Layout Div)
+
+Div component with slot that can hold any content
+
+***
+
+### Section
+
+* Theme Variant for color switching
+* Padding top & bottom variants
+* Slot for container content
+
+***
+
+## SVG Group
+
+Holds icons, logos, and all svgs
+
+***
+
+### Icon Arrow
+
+***
+
+### Icon Arrow Full
+
+***
+
+### Icon X
+
+***
+
+### Icon Search
+
+***
+
+### Logo
+
+Site-wide logo used in the nav, footer, and everywhere else. Replace the SVG in this component using the SVG Import App to update the logo globally.
+
+***
+
+### Stroke Path
+
+Use this component as the paths inside any outlined svgs. The stroke width matches the border width used throughout the site.
+
+***
+
+## Typography Group
+
+Holds all text-related components
+
+***
+
+### Typography Eyebrow
+
+Subheading component used site-wide
+
+***
+
+### Typography Heading
+
+This is a rich text heading element. Plain text headings can't have bold, italic, or subscript characters inside them when linked to a component prop. So rich text is the default for all headings in Lumos. Headings are their own component separate from paragraphs so that the font sizes, spacing, and other styles can be easily controlled independently for each element.
+
+* Variant for font size
+* Class attribute for other styles
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2Fo8btUh0dwlwEbMW5Jzgh%2F1.png?alt=media&#x26;token=839cf6db-39d5-4658-ae74-b97f1fd376b2" alt="" width="355"><figcaption></figcaption></figure></div>
+
+Add u-child-contain and u-max-width- when the heading should have a max width while also respecting the alignment mode of the parent
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2F0ltPlrOOH2soxaKUK8hI%2F0.png?alt=media&#x26;token=4105d26d-512a-4e3b-9908-eb29cc85d577" alt=""><figcaption></figcaption></figure>
+
+***
+
+### Typography Paragraph
+
+This is a rich text paragraph element. Plain text paragraphs can't have bold, italic, or subscript characters or links inside them when linked to a component prop. So rich text is the default for all paragraphs in Lumos. Paragraphs are their own component separate from headings so that the font sizes, spacing, and other styles can be easily controlled independently for each element.
+
+* Variant for font size
+* Class attribute for other styles
+
+Add u-child-contain and u-max-width- when the heading should have a max width while also respecting the alignment mode of the parent
+
+<figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2F0ltPlrOOH2soxaKUK8hI%2F0.png?alt=media&#x26;token=4105d26d-512a-4e3b-9908-eb29cc85d577" alt=""><figcaption></figcaption></figure>
+
+***
+
+### Typography Tag
+
+Text in a card-like tag used as a subheading or callout throughout the site
+
+***
+
+## Utility Group
+
+Holds components that shouldn't be used by the client or someone in Page Build Mode. These utility components go inside of parent components but aren't intended for direct use.
+
+***
+
+### Background Color
+
+Position absolute div that covers the background of a section and has variants for switching between lighter and darker shades of the section's background color within each theme.
+
+***
+
+### Clickable
+
+Position absolute link block and button tag that goes inside of cards or buttons to make them clickable. When the link block's url isn't set, the link block is set to display none and a html button tag is used in its place.
+
+***
+
+### Spacer
+
+Used to create top and bottom space within each section. Has variants for switching spacer size.
+
+***
+
+### Starter / CSS
+
+Contains an embed set to display none with `<style></style>` tags inside. Unlink this component before using it. This is used for adding css inside any section component and should be the first child of the section.
+
+***
+
+### Starter / JS
+
+Contains an embed set to display none. Unlink this component before using it. This is used for adding javascript inside any section component. It should be the last child of the section and contains the following script to use as a starting point.&#x20;
+
+The DOMContentLoaded ensures the script doesn't run until all of the page content is loaded.
+
+The each loop applies the code to every instance of .your-section throughout the page. Replace "your-section" with the class of your current section.
+
+An attribute of "script-initialized" is added to the section so the script never runs on the section more than once even if the embed is included multiple times on the same page.
+
+```html
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".your-section").forEach((element) => {
+    if (element.dataset.scriptInitialized) return;
+    element.dataset.scriptInitialized = "true";
+    // run script here
+  });
+});
+</script>
+```
+
+#### jQuery Version
+
+If you'd prefer to work with jQuery instead of JavaScript, here is the jQuery version.
+
+```html
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  $(".your-section").each(function () {
+    if ($(this).attr("script-initialized") === "true") return;     
+    $(this).attr("script-initialized", "true");
+    // run script here
+  });
+});
+</script>
+```
+
+***
+
+## Visual Group
+
+Holds components such as images, videos, overlays, gradients, and textures
+
+***
+
+### Media Overlay
+
+A position absolute div with a black background and a prop for controlling the overlay's opacity.
+
+Use above images or videos to darken them when text is on top of them.
+
+***
+
+### Visual Image
+
+Image with an aspect ratio and faded background color that shows as a placeholder before the image is loaded in.
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FVNSU0FpczaPSu1dCPNjG%2F0.png?alt=media&#x26;token=4b8c5e56-e0ca-424c-b4c5-627de1612b9c" alt="" width="178"><figcaption></figcaption></figure></div>
+
+Use the image as a section background by adding the following classes and placing the image in the container
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FMNUuiMuetuQQmjAWjKT1%2F1.png?alt=media&#x26;token=29bf0efd-099a-4d57-9394-2c19eb95cda8" alt="" width="360"><figcaption></figcaption></figure></div>
+
+***
+
+### Visual Video
+
+HTML Video Element
+
+Must have a direct link to the video file through services like Bunny.net, a paid Vimeo account, GetAFile, or similar.&#x20;
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FmkcNBAdHgDDvK5LA0pVA%2F2.png?alt=media&#x26;token=e43d077f-b37d-4c1a-a650-4e4a99ad14ed" alt="" width="178"><figcaption></figcaption></figure></div>
+
+Use the video as a section background by adding the following classes and placing the video in the container
+
+<div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2F9nZYOw3ipnt9RQcC2zF5%2F1.png?alt=media&#x26;token=98bf7c07-9f3d-4c4f-a9e6-a911b608decf" alt="" width="360"><figcaption></figcaption></figure></div>
+
+***
+
+
+
+
+
+
+# FAQs
+
+
+
+<details>
+
+<summary>Where should custom css be added?</summary>
+
+It's usually best to keep custom css in an embed on the page so we can see the results of the css without having to publish our site. If for some reason, we only want the css to run on the published site and not in the designer preview, we can add that css in page settings head code (if it only applies to one page) or site settings head code (if it should apply to every page of our site). For css that should run in designer preview and apply to every page of the site, we can add it inside the Global Styles component. For css that only applies to a certain section or component, we can store it inside an embed inside that component. "Starter / CSS" is an example css embed component that could be added inside another component. Be sure to unlink that "Starter / CSS" component before adding your own code.
+
+</details>
+
+<details>
+
+<summary>Where should custom javascript be added?</summary>
+
+Custom javascript that applies to every page of the site should go in site settings footer code. Especially cdn links like gsap, swiper, or lenis should go there so that every page has access to them. If the javascript only applies to a specific component type, it can be stored in an embed inside that section component as the last child of the section. If the section component ever needs to be unlinked, the embed should first be turned into its own component so it can still be updated globally.&#x20;
+
+There's a "Starter / JS" component in Lumos with this example code. Be sure to unlink that "Starter / JS" component before adding your own code.
+
+</details>
+
+<details>
+
+<summary>What about websites that weren't designed with a strong design system in mind?</summary>
+
+Lumos can work with nearly any type of design, but the more consistent a design is the easier it will be to build with Lumos. When a design is really inconsistent, it can be helpful to chat with the designer and give some recommendations for cleanup that can be done in development. Some helpful things to consider when designing a site to build with Lumos...&#x20;
+
+• Design on a consistent grid like a 12 column or 10 column grid\
+• Plan what each element will look like in light theme, dark theme, and any other needed themes\
+• Plan for a couple different vertical section spacing values\
+• Use the Lumos Figma FIle for an even easier design flow
+
+</details>
+
+<details>
+
+<summary>How can I update from a previous version of Lumos to the latest version of Lumos?</summary>
+
+Unfortunately, there's no way to automatically update to the latest version. Once a project is started, updating everything can be very time consuming because classes and components are already in use throughout the project and it's a manual process to replace every instance of an older class in each section and checking to ensure the layout still works with the new styles. However, we can use the Lumos Changelog to compare differences between any two versions. If there are new classes added, those classes can be copied from a current cloneable into the existing project.
+
+</details>
+
+<details>
+
+<summary>How to add Lumos into an existing project that was not created with Lumos?</summary>
+
+Webflow's libraries feature makes it easy to import components, variables, and classes. Watch this video to learn how.\
+[https://www.youtube.com/watch?v=GF6731jtcQ4](https://www.youtube.com/watch?v=GF6731jtcQ4)
+
+</details>
+
+<details>
+
+<summary>Are IDs auto generated on Lumos Grids?</summary>
+
+No, Webflow only auto-generates IDs on children when the parent's base class has display: grid applied. Stacking a grid utility on top of a component class prevents Webflow from auto-generating IDs. When setting grid-column & grid-row through custom properties, it's completely tied to the class name of the element, not an ID.
+
+</details>
+
+<details>
+
+<summary>Why aren't my videos showing up when I add the src attribute to the custom element with a tag of video or on the Global / Visual component?</summary>
+
+1. Ensure that you have a direct link to the video from something like an AWS account or paid Vimeo account. Regular YouTube or Vimeo links to the video inside a player will not work.
+2. When testing on a phone, ensure that your phone isn't in low power mode since the device will automatically disable all autoplaying videos in that case.
+
+</details>
+
+<details>
+
+<summary>How to add an SVG?</summary>
+
+The [SVG Import App](https://webflow.partnerlinks.io/svgimportapp) for Webflow can help us quickly import svgs.&#x20;
+
+For outlined svgs, set the following attributes on the svg paths to link the stroke width to a variable and to keep the stroke width consistent regardless of the svg size. Give the svg a class of "u-svg" and turn it into a component for global reuse.\
+\
+stroke-width="var(--border-width--main)"\
+vector-effect="non-scaling-stroke"
+
+[https://www.youtube.com/watch?v=QCHmTaNlgd4](https://www.youtube.com/watch?v=QCHmTaNlgd4)
+
+</details>
+

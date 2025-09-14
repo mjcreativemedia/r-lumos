@@ -15,8 +15,7 @@ u-line-clamp-{1-2-3-4},u-line-clamp-{1-2-3-4},Typography
 u-content-wrapper,u-content-wrapper,Element
 u-button-group,u-button-group,Element
 u-child-contain,u-child-contain,Typography
-u-flex-horizontal-{wrap-nowrap},u-flex-horizontal-{wrap-nowrap},Flexbox
-u-flex-vertical-{wrap-nowrap},u-flex-vertical-{wrap-nowrap},Flexbox
+u-flex-{wrap-nowrap},u-flex-{wrap-nowrap},Flexbox
 u-flex-grow,u-flex-grow,Flexbox
 u-flex-shrink,u-flex-shrink,Flexbox
 u-flex-noshrink,u-flex-noshrink,Flexbox

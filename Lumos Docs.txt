@@ -34,7 +34,7 @@ Apply no styles to the tablet, mobile landscape, or mobile portrait breakpoints.
 
 ### 1. Enable wrapping for any horizontal flexboxes
 
-* This lets the browser decide when the layout should wrap.
+* Use the `u-flex-wrap` utility so the browser decides when the layout should wrap.
 * If new links are added later, if the user translates the site into a longer language, or if the user increases their preferred font size, the layout will still wrap before we run out of space.
 
 <figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2Fqa9XULllgAN0acIgqnxO%2F1.png?alt=media&#x26;token=18339e30-40fa-40f6-8366-28e325fed629" alt=""><figcaption></figcaption></figure>
@@ -47,6 +47,7 @@ Apply no styles to the tablet, mobile landscape, or mobile portrait breakpoints.
 ### 3. Use flex basis ([example](https://preview.webflow.com/preview/flex-basis-example?utm_medium=preview_link\&utm_source=designer\&utm_content=flex-basis-example\&preview=ff8e3a50de8ad7d7ccdaa62c9f36f6b9\&workflow=canvas))
 
 #### Step 1: Enable wrapping on a flex parent
+Apply the `u-flex-wrap` utility to the parent container.
 
 <div align="left"><figure><img src="https://2275289646-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFfsAtt2Y0CpEmCO8yLYb%2Fuploads%2FAwhz8siTat4oeroVCwpC%2F1.png?alt=media&#x26;token=bb8f9f2d-5802-4d76-9a20-42a188b5ab84" alt="" width="375"><figcaption></figcaption></figure></div>
 

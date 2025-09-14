@@ -37,7 +37,7 @@ body {
 /* ---------- Flex helpers ---------- */
 .u-items-center{align-items:center;} .u-items-start{align-items:flex-start;} .u-items-end{align-items:flex-end;}
 .u-justify-center{justify-content:center;} .u-justify-between{justify-content:space-between;} .u-justify-start{justify-content:flex-start;} .u-justify-end{justify-content:flex-end;}
-.u-wrap{flex-wrap:wrap;} .u-nowrap{flex-wrap:nowrap;}
+.u-flex-wrap{flex-wrap:wrap;} .u-flex-nowrap{flex-wrap:nowrap;}
 
 /* ---------- Grid helpers ---------- */
 .u-grid--cols-2{grid-template-columns:repeat(2,1fr);}

@@ -9,6 +9,7 @@ u-container-{small-full},u-container-{small-full},Element
 u-svg,u-svg,Element
 u-path,u-path,Element
 u-sr-only,u-sr-only,Typography
+u-not-sr-only,u-not-sr-only,Typography
 u-section-spacer,u-section-spacer,Element
 u-heading-accent,u-heading-accent,Color
 u-line-clamp-{1-2-3-4},u-line-clamp-{1-2-3-4},Typography

@@ -10,6 +10,10 @@ It's unique approach to class naming, components, layout, & responsiveness bring
 
 Ready to become unstoppable? Dive in!
 
+# Accessibility Utilities
+
+Use `.u-sr-only` to visually hide content while keeping it available to screen readers. Apply `.u-not-sr-only` to reverse this behavior when the content should be visible again.
+
 # Breakpointless
 
 {% embed url="https://www.youtube.com/watch?v=Yq8Snsh40fE" %}

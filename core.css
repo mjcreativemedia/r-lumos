@@ -187,26 +187,7 @@ a:hover{ text-decoration-color: currentColor; }
 .u-theme-dark {}
 .u-brand-neutral {}
 
-/* --- Layout Container --- */
-.u-container {
-  max-width: var(--container--max);
-  margin-inline: auto;
-  padding-inline: var(--site--margin);
-}
-
-/* --- Flex utilities (breakpointless) --- */
-.u-flex { display: flex; }
-.u-flex-wrap { flex-wrap: wrap; }                 /* Lumos #1 technique */
-.u-flex-col { flex-direction: column; }
-.u-justify-start { justify-content: flex-start; }
-.u-justify-between { justify-content: space-between; }
-.u-items-center { align-items: center; }
-.u-grow-1 { flex: 1 1 auto; }
-.u-grow-500 { flex: 500 1 0; }                    /* fills remaining space */
-.u-basis-auto { flex-basis: auto; }
-
 /* --- Grid utilities (autofit / autofill) --- */
-.u-grid { display: grid; gap: var(--site--gutter); }
 .u-grid-autofit-sm {
   grid-template-columns: repeat(auto-fit, minmax(var(--grid-col-min-sm), 1fr));
 }

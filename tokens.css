@@ -156,8 +156,8 @@
 }
 
 /* ---------- Role Maps (Themes) ---------- */
-/* Light */
-.u-theme-light {
+/* Light (default) */
+:root, .u-theme-light {
   --theme--bg: var(--swatch--neutral-0);
   --theme--bg-muted: var(--swatch--neutral-50);
   --theme--text: var(--swatch--neutral-900);
